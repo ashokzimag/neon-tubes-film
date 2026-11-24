@@ -1,0 +1,73 @@
+{
+  "style": "neon-tubes",
+  "slug": "neon-tubes",
+  "name": "Neon Tubes",
+  "name_zh": "霓虹灯管",
+  "category": "Light & Lines",
+  "station": 12,
+  "demo": "Midnight Snack",
+  "demo_duration": 48,
+  "palette": {
+    "primary": ["#00FFFF", "#FF00FF", "#FFBF00", "#007BFF", "#FF69B4"],
+    "background": "#001133",
+    "electrode": "#FFD700",
+    "gasCore": "#FFFFFF",
+    "glowBleed": "rgba(0,255,255,0.15)"
+  },
+  "tubePhysics": {
+    "tubeWidth": 8,
+    "electrodeLength": 12,
+    "glowBleedRadius": 24,
+    "gasDiffusion": 0.3,
+    "flickerAmplitude": 0.15,
+    "flickerSpeedRange": [0.5, 2.0],
+    "writeOnStyle": "stroke-by-stroke"
+  },
+  "animation": {
+    "writeOnEasing": "easeOutCubic",
+    "morphDuration": 2.0,
+    "pulseSync": "beat",
+    "countdownStyle": "segment-replace"
+  },
+  "reflections": {
+    "enabled": true,
+    "surfaces": ["wet-pavement", "puddles", "glass", "chrome"],
+    "wetness": 0.7,
+    "rippleSpeed": 0.5,
+    "distortion": 0.02
+  },
+  "camera": {
+    "type": "fixed-pov-walk",
+    "movement": "dolly-forward",
+    "cuts": "scene-boundaries-only"
+  },
+  "audio": {
+    "musicGenre": "synthwave",
+    "musicKey": "F#m",
+    "musicTempo": 120,
+    "voiceProfile": "warm-female",
+    "voiceModel": "af_heart",
+    "sfxStyle": "diegetic-minimal"
+  },
+  "technical": {
+    "resolution": "1920x1080",
+    "fps": 24,
+    "renderer": "canvas2d+webgl",
+    "encode": "h264-crf18",
+    "audioSampleRate": 48000
+  },
+  "tags": ["night", "urban", "multilingual", "walk", "food", "atmospheric"],
+  "suitableFor": [
+    "night city portraits",
+    "food/travel shorts",
+    "brand films with urban aesthetic",
+    "multilingual content",
+    "atmospheric storytelling"
+  ],
+  "notSuitableFor": [
+    "daylight scenes",
+    "clean corporate explainers",
+    "fast-paced action",
+    "text-heavy tutorials"
+  ]
+}

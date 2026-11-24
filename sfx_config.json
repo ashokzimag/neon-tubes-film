@@ -1,0 +1,118 @@
+{
+  "project": "neon-sample-film",
+  "style": "neon-tubes",
+  "duration": 45,
+  "fps": 24,
+  "sfx": [
+    {
+      "id": "door_creak",
+      "time": 0.0,
+      "type": "sample",
+      "file": "core/sfx/samples/door_creak.wav",
+      "gain": -6,
+      "pitch": 1.0
+    },
+    {
+      "id": "footsteps",
+      "time": 5.0,
+      "duration": 15.0,
+      "type": "procedural",
+      "engine": "footsteps",
+      "params": {
+        "surface": "concrete",
+        "pace": "walking",
+        "variation": 0.15,
+        "reverb": 0.3
+      },
+      "gain": -12
+    },
+    {
+      "id": "kitchen_sizzle",
+      "time": 12.0,
+      "duration": 8.0,
+      "type": "procedural",
+      "engine": "sizzle",
+      "params": {
+        "intensity": 0.6,
+        "sputter_rate": 8,
+        "oil_pop": true
+      },
+      "gain": -10
+    },
+    {
+      "id": "exhaust_fan",
+      "time": 12.0,
+      "duration": 8.0,
+      "type": "procedural",
+      "engine": "drone",
+      "params": {
+        "frequency": 120,
+        "harmonics": 4,
+        "wobble": 0.02
+      },
+      "gain": -18
+    },
+    {
+      "id": "store_chime",
+      "time": 20.0,
+      "type": "sample",
+      "file": "core/sfx/samples/store_chime.wav",
+      "gain": -8,
+      "pitch": 1.1
+    },
+    {
+      "id": "crosswalk_beep",
+      "time": 28.0,
+      "duration": 7.0,
+      "type": "procedural",
+      "engine": "beep",
+      "params": {
+        "frequency": 880,
+        "duration": 0.15,
+        "interval": 1.0,
+        "decay": 0.3
+      },
+      "gain": -6
+    },
+    {
+      "id": "noren_rustle",
+      "time": 35.0,
+      "type": "sample",
+      "file": "core/sfx/samples/fabric_rustle.wav",
+      "gain": -14,
+      "pitch": 0.9
+    },
+    {
+      "id": "bowl_clack",
+      "time": 42.0,
+      "type": "sample",
+      "file": "core/sfx/samples/bowl_set_down.wav",
+      "gain": -4,
+      "pitch": 1.0
+    },
+    {
+      "id": "chopsticks",
+      "time": 42.3,
+      "type": "sample",
+      "file": "core/sfx/samples/chopsticks_click.wav",
+      "gain": -10,
+      "pitch": 1.1
+    },
+    {
+      "id": "city_hum",
+      "time": 0.0,
+      "duration": 45.0,
+      "type": "procedural",
+      "engine": "drone",
+      "params": {
+        "frequency": 60,
+        "harmonics": 8,
+        "wobble": 0.05,
+        "filter": "lowpass",
+        "cutoff": 200
+      },
+      "gain": -24,
+      "duck_under": ["voice", "sfx"]
+    }
+  ]
+}

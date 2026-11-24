@@ -1,0 +1,123 @@
+name: Build Neon Tubes Film
+
+on:
+  workflow_dispatch:  # Manual trigger from Actions tab
+  push:
+    branches: [main]
+    paths:
+      - 'neon-sample-film/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build-film:
+    name: Render Neon Tubes Film
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      # ─── Checkout ──────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ─── System Dependencies ──────────────────────────────────
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg python3.12 python3.12-venv
+          ffmpeg -version
+          python3.12 --version
+
+      # ─── Node.js ──────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ─── Cache Lemo-Opuscar Library ───────────────────────────
+      - name: Cache Lemo-Opuscar library
+        id: cache-lib
+        uses: actions/cache@v4
+        with:
+          path: ~/lemo-opuscar
+          key: lemo-opuscar-${{ hashFiles('**/package-lock.json', '**/requirements*.txt') }}
+          restore-keys: |
+            lemo-opuscar-
+
+      # ─── Clone/Update Lemo-Opuscar ────────────────────────────
+      - name: Prepare Lemo-Opuscar library
+        if: steps.cache-lib.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/lemomo-ai/lemo-opuscar.git ~/lemo-opuscar
+          cd ~/lemo-opuscar
+          git sparse-checkout set '/*' '!/styles/*/demo/' '!/styleboard/' '!/docs/readme/' '!/docs/cover.jpg' '!/styles/*/poster.jpg'
+
+      # ─── Install Core Dependencies ────────────────────────────
+      - name: Install core dependencies
+        run: |
+          cd ~/lemo-opuscar
+          sh plugin/skills/lemo-opuscar/scripts/setup.sh deps
+
+      # ─── Install Voice & Music Tiers ──────────────────────────
+      - name: Install voice and music packages
+        run: |
+          cd ~/lemo-opuscar
+          sh plugin/skills/lemo-opuscar/scripts/setup.sh deps voice music
+
+      # ─── Copy Project Files ───────────────────────────────────
+      - name: Copy film project
+        run: |
+          mkdir -p ~/film-project
+          cp -r neon-sample-film/* ~/film-project/
+          ls -la ~/film-project/
+
+      # ─── Build the Film ───────────────────────────────────────
+      - name: Render Neon Tubes film
+        env:
+          LEMO_OPUSCAR_HOME: /home/runner/lemo-opuscar
+        run: |
+          cd ~/film-project
+          chmod +x build.sh
+          ./build.sh
+
+      # ─── Verify Output ────────────────────────────────────────
+      - name: Verify output
+        run: |
+          ls -la ~/film-project/build/
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ~/film-project/build/output.mp4
+
+      # ─── Upload Artifact ──────────────────────────────────────
+      - name: Upload MP4 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-tubes-film
+          path: ~/film-project/build/output.mp4
+          retention-days: 30
+
+      # ─── Upload Frames (optional, for debugging) ──────────────
+      - name: Upload frames (debug)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-tubes-frames
+          path: ~/film-project/build/frames/
+          retention-days: 7
+
+      # ─── Summary ──────────────────────────────────────────────
+      - name: Build summary
+        run: |
+          echo "## 🎬 Neon Tubes Film Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Style | Neon Tubes |" >> $GITHUB_STEP_SUMMARY
+          echo "| Duration | 45 seconds |" >> $GITHUB_STEP_SUMMARY
+          echo "| Resolution | 1920×1080 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Frame Rate | 24 fps |" >> $GITHUB_STEP_SUMMARY
+          echo "| Output | \`build/output.mp4\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Download the MP4 from the Artifacts section below**" >> $GITHUB_STEP_SUMMARY
